@@ -1,5 +1,5 @@
-mod models;
-pub use models::*;
+mod request_model;
+pub use request_model::*;
 mod roles;
 pub use roles::*;
 
