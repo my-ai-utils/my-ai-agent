@@ -1,0 +1,2 @@
+[workspace]
+members = ["my-ai-agent", "agent-core", "ai-macros", "tests", "ai-models"]
