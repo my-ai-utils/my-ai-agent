@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{sync::Arc, time::Duration};
 
 use flurl::{FlUrl, body::FlUrlBody};
 use rust_extensions::{base64::IntoBase64, date_time::DateTimeAsMicroseconds};
@@ -8,8 +8,11 @@ use crate::{OpenAiRequestBodyBuilder, my_auto_gen::*};
 pub async fn execute_fl_url_request(
     settings: &HttpRequestSettingsModel,
     rb: &OpenAiRequestBodyBuilder,
+    http_clients_cache: Arc<flurl::FlUrlHttpClientsCache>,
 ) -> Result<(OpenAiRespModel, String), String> {
-    let mut fl_url = FlUrl::new(settings.url.as_str()).set_timeout(Duration::from_secs(60));
+    let mut fl_url = FlUrl::new(settings.url.as_str())
+        .set_timeout(Duration::from_secs(60))
+        .with_clients_cache(http_clients_cache);
 
     if let Some(api_key) = settings.api_key.as_ref() {
         fl_url = fl_url.with_header("Authorization", format!("Bearer {}", api_key));
