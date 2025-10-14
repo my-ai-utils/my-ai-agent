@@ -19,11 +19,20 @@ pub async fn execute_request_as_stream(
 
     let mut mock_items = None;
 
+    let fl_url_connections = Arc::new(flurl::FlUrlHttpClientsCache::new());
+
     loop {
         let mut had_fn_called = false;
         let mut response = match &settings {
             AutoGenSettings::HttpRequest(settings_model) => {
-                match prepare_open_ai_fl_url_streamed_request(&settings_model, &rb, &logger).await {
+                match prepare_open_ai_fl_url_streamed_request(
+                    &settings_model,
+                    &rb,
+                    &logger,
+                    &fl_url_connections,
+                )
+                .await
+                {
                     Ok(response) => response,
                     Err(err) => {
                         let _ = sender.send(Err(err)).await;
@@ -122,8 +131,9 @@ async fn prepare_open_ai_fl_url_streamed_request(
     settings: &HttpRequestSettingsModel,
     rb: &OpenAiRequestBodyBuilder,
     logger: &Arc<dyn Logger + Send + Sync>,
+    clients_cache: &Arc<flurl::FlUrlHttpClientsCache>,
 ) -> Result<OpenAiInnerResponseStream, String> {
-    let response = prepare_open_ai_fl_url(settings, rb, logger).await?;
+    let response = prepare_open_ai_fl_url(settings, rb, logger, clients_cache).await?;
     let status_code = response.get_status_code();
 
     if status_code != 200 {
@@ -152,10 +162,13 @@ async fn prepare_open_ai_fl_url(
     settings: &HttpRequestSettingsModel,
     rb: &OpenAiRequestBodyBuilder,
     logger: &Arc<dyn Logger + Send + Sync>,
+    clients_cache: &Arc<flurl::FlUrlHttpClientsCache>,
 ) -> Result<FlUrlResponse, String> {
     let mut attempt = 0;
     loop {
-        let mut fl_url = FlUrl::new(settings.url.as_str()).set_timeout(Duration::from_secs(60));
+        let mut fl_url = FlUrl::new(settings.url.as_str())
+            .set_timeout(Duration::from_secs(60))
+            .with_clients_cache(clients_cache.clone());
 
         if let Some(api_key) = settings.api_key.as_ref() {
             fl_url = fl_url.with_header("Authorization", format!("Bearer {}", api_key));
