@@ -26,6 +26,7 @@ pub fn generate(input: &syn::DeriveInput) -> Result<TokenStream, syn::Error> {
     } else {
         quote::quote! {  .write("required", my_ai_agent::my_json::json_writer::EmptyJsonArray)}
     };
+
     let result = quote::quote! {
 
         #[async_trait::async_trait]
@@ -45,6 +46,12 @@ pub fn generate(input: &syn::DeriveInput) -> Result<TokenStream, syn::Error> {
 
        }
 
+      }
+
+
+      impl my_ai_agent::json_schema::GetJsonTypeName for #struct_name{
+            const TYPE_NAME: &'static str = "object";
+            const OPTIONAL:bool = false;
       }
 
     };
