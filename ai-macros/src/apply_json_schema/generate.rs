@@ -42,7 +42,8 @@ pub fn generate(input: &syn::DeriveInput) -> Result<TokenStream, syn::Error> {
         my_ai_agent::my_json::json_writer::JsonObjectWriter::new().write("type", "object")
         .write("properties", props )
         #required
-        .write("additionalProperties", false)
+        .write("$schema", "http://json-schema.org/draft-07/schema#")
+       //.write("additionalProperties", false)
 
        }
 
