@@ -27,6 +27,8 @@ pub fn generate(input: &syn::DeriveInput) -> Result<TokenStream, syn::Error> {
         quote::quote! {  .write("required", my_ai_agent::my_json::json_writer::EmptyJsonArray)}
     };
 
+    let struct_name_as_string = struct_name.to_string();
+
     let result = quote::quote! {
 
         #[async_trait::async_trait]
@@ -42,7 +44,8 @@ pub fn generate(input: &syn::DeriveInput) -> Result<TokenStream, syn::Error> {
         my_ai_agent::my_json::json_writer::JsonObjectWriter::new().write("type", "object")
         .write("properties", props )
         #required
-        .write("$schema", "http://json-schema.org/draft-07/schema#")
+        //.write("$schema", "http://json-schema.org/draft-07/schema#")
+        //.write("title", #struct_name_as_string)
        //.write("additionalProperties", false)
 
        }
