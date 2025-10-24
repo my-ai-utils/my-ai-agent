@@ -53,8 +53,8 @@ mod tests {
         );
 
         let func_json_description = FunctionDescriptionJsonModel {
-            name: "filter_showrooms".to_string(),
-            description: "Filters company location data from a JSON file based on criteria like city (extracted from address), specific service offered (e.g., Sales, Repairs), and geolocation ranges (latitude/longitude).".to_string(),
+            name: "filter_showrooms",
+            description: "Filters company location data from a JSON file based on criteria like city (extracted from address), specific service offered (e.g., Sales, Repairs), and geolocation ranges (latitude/longitude).",
             parameters: serde_json::from_str(MyRequestModel::get_description(false).await.build().as_str()).unwrap(),
             strict: None,
         };

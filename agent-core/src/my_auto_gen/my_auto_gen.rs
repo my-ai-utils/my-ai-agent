@@ -69,13 +69,7 @@ impl MyAutoGen {
             }
         };
 
-        tool_functions
-            .register_function(
-                TToolFunction::FUNC_NAME,
-                TToolFunction::DESCRIPTION,
-                tool_function,
-            )
-            .await;
+        tool_functions.register_function(tool_function).await;
     }
 
     pub async fn execute(

@@ -103,8 +103,8 @@ pub struct ToolCallFunctionDescription {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct FunctionDescriptionJsonModel {
-    pub name: String,
-    pub description: String,
+    pub name: &'static str,
+    pub description: &'static str,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub strict: Option<bool>,
     pub parameters: serde_json::Value,

@@ -4,7 +4,7 @@ use serde::de::DeserializeOwned;
 
 use crate::my_auto_gen::{ToolFunction, ToolFunctionAbstract, ToolFunctionHolder};
 
-use crate::json_schema::*;
+use crate::{ToolDefinition, json_schema::*};
 
 use ai_models::*;
 
@@ -26,16 +26,15 @@ impl ToolFunctions {
 
     pub async fn register_function<
         ParamType: JsonTypeDescription + DeserializeOwned + Send + Sync + 'static,
-        TToolFunction: ToolFunction<ParamType> + Send + Sync + 'static,
+        TToolFunction: ToolFunction<ParamType> + Send + Sync + 'static + ToolDefinition,
     >(
         &mut self,
-        func_name: &'static str,
-        func_description: &'static str,
+
         tool_function: Arc<TToolFunction>,
     ) {
         let func_json_description = FunctionDescriptionJsonModel {
-            name: func_name.to_string(),
-            description: func_description.to_string(),
+            name: TToolFunction::FUNC_NAME,
+            description: TToolFunction::DESCRIPTION,
             parameters: serde_json::from_str(
                 ParamType::get_description(false).await.build().as_str(),
             )
@@ -43,12 +42,12 @@ impl ToolFunctions {
             strict: None,
         };
 
-        let holder = ToolFunctionHolder::new(func_name, tool_function);
+        let holder = ToolFunctionHolder::new(TToolFunction::FUNC_NAME, tool_function);
 
         let holder = Arc::new(holder);
 
         self.register(
-            func_name,
+            TToolFunction::FUNC_NAME,
             serde_json::to_value(func_json_description).unwrap(),
             holder,
         );
