@@ -1,20 +1,21 @@
-use my_json::json_writer::JsonObjectWriter;
-use rust_extensions::StrOrString;
-
-use super::*;
-
+/*
 #[async_trait::async_trait]
-impl<T: GetJsonTypeName> JsonTypeDescription for Option<Vec<T>> {
-    async fn get_type_description(
+impl<T: JsonTypeDescription> JsonTypeDescription for Option<Vec<T>> {
+    async fn fill_type_description(
+        src: my_json::json_writer::JsonObjectWriter,
         description: Option<&str>,
         default: Option<&str>,
-        enum_data: Option<Vec<StrOrString<'static>>>,
+        enum_data: Option<&[StrOrString<'static>]>,
     ) -> my_json::json_writer::JsonObjectWriter {
-        generate_description_of_opt_of_vec_parameter::<T>(description, default, enum_data).await
+        let items = T::fill_type_description(src, None, None, enum_data).await;
+        src.write_if_some("description", description)
+            .write("items", items)
+            .write("default", default)
     }
 }
-
-async fn generate_description_of_opt_of_vec_parameter<Tp: GetJsonTypeName>(
+ */
+/*
+async fn generate_description_of_opt_of_vec_parameter<Tp: JsonSchemaDescription>(
     description: Option<&str>,
     default: Option<&str>,
     enum_data: Option<Vec<StrOrString<'static>>>,
@@ -24,6 +25,6 @@ async fn generate_description_of_opt_of_vec_parameter<Tp: GetJsonTypeName>(
         .write_if_some("description", description)
         .write("default", default);
 
-    super::vec_of::fill_array_sub_elements(result, Tp::TYPE_NAME, &enum_data)
-        .write("uniqueItems", true)
+    super::vec_of::fill_array_sub_elements::<Tp>(result, &enum_data).write("uniqueItems", true)
 }
+ */

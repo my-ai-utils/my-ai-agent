@@ -22,7 +22,7 @@ fn generate_description_of_parameter<T: GetJsonTypeName>(
     let tp = T::TYPE_NAME;
 
     let mut result = JsonObjectWriter::new()
-        .write("type", tp)
+        .write("type", tp.as_str())
         .write_if_some("description", description);
 
     if let Some(enum_data) = enum_data {

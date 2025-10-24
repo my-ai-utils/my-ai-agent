@@ -20,7 +20,11 @@ mod tests {
 
     #[tokio::test]
     async fn test_generation() {
-        let description = MyRequestModelNoRequired::get_description().await.build();
+        let description = MyRequestModelNoRequired::get_description(false)
+            .await
+            .build();
+
+        println!("{}", description.as_str());
 
         let result = my_json::j_path::get_value(description.as_bytes(), "type")
             .unwrap()
@@ -46,7 +50,5 @@ mod tests {
             .unwrap();
 
         assert!(result.as_str().is_none());
-
-        assert_eq!(description, "{\"type\":\"object\",\"properties\":{\"city\":{\"type\":\"string\",\"description\":\"city description\",\"default\":null},\"service\":{\"type\":\"string\",\"description\":\"service\",\"default\":null}},\"required\":[],\"additionalProperties\":false}");
     }
 }

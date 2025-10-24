@@ -5,7 +5,7 @@ use serde::de::DeserializeOwned;
 use crate::json_schema::*;
 
 #[async_trait::async_trait]
-pub trait ToolFunction<ParamsType: JsonSchemaDescription> {
+pub trait ToolFunction<ParamsType: JsonTypeDescription> {
     async fn callback(&self, params: ParamsType, ctx: &str) -> Result<String, String>;
 }
 
@@ -14,12 +14,12 @@ pub trait ToolFunctionAbstract {
     async fn call(&self, func: &str, params: &str, ctx: &str) -> Result<String, String>;
 }
 
-pub struct ToolFunctionHolder<ParamsType: JsonSchemaDescription> {
+pub struct ToolFunctionHolder<ParamsType: JsonTypeDescription> {
     inner: Arc<dyn ToolFunction<ParamsType> + Send + Sync + 'static>,
     pub func_name: &'static str,
 }
 
-impl<ParamsType: JsonSchemaDescription> ToolFunctionHolder<ParamsType> {
+impl<ParamsType: JsonTypeDescription> ToolFunctionHolder<ParamsType> {
     pub fn new(
         func_name: &'static str,
         func: Arc<dyn ToolFunction<ParamsType> + Send + Sync + 'static>,
@@ -32,7 +32,7 @@ impl<ParamsType: JsonSchemaDescription> ToolFunctionHolder<ParamsType> {
 }
 
 #[async_trait::async_trait]
-impl<ParamsType: JsonSchemaDescription + DeserializeOwned + Send + Sync + 'static>
+impl<ParamsType: JsonTypeDescription + DeserializeOwned + Send + Sync + 'static>
     ToolFunctionAbstract for ToolFunctionHolder<ParamsType>
 {
     async fn call(&self, fn_name: &str, params: &str, ctx: &str) -> Result<String, String> {

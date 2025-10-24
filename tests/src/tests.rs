@@ -30,12 +30,89 @@ pub struct MyRequestModel {
 async fn get_other_condition_enum() -> Option<Vec<StrOrString<'static>>> {
     None
 }
+
+impl MyRequestModel {
+    async fn get_description() -> my_ai_agent::my_json::json_writer::JsonObjectWriter {
+        use my_ai_agent::json_schema::JsonTypeDescription;
+        let props = my_ai_agent::my_json::json_writer::JsonObjectWriter::new()
+            .write(
+                "city",
+                String::get_description(false)
+                    .await
+                    .write("description", "city"),
+            )
+            .write(
+                "service",
+                Option::<String>::get_description(false)
+                    .await
+                    .write("description", "service"),
+            )
+            .write(
+                "addr",
+                Option::<String>::get_description(false)
+                    .await
+                    .write("description", "Address of dealer"),
+            )
+            .write(
+                "condition",
+                Option::<String>::get_description(false)
+                    .await
+                    .write(
+                        "description",
+                        "Vehicle condition (NEW/CPO). Defaults to None",
+                    )
+                    .write_iter("enum", ["NEW", "CPO"].into_iter()),
+            )
+            .write(
+                "other_condition",
+                String::get_description(false)
+                    .await
+                    .write(
+                        "description",
+                        "Vehicle condition (NEW/CPO). Defaults to None",
+                    )
+                    .write_iter_if_some(
+                        "enum",
+                        get_other_condition_enum().await.map(|itm| itm.into_iter()),
+                    ),
+            )
+            .write(
+                "min_condition",
+                Option::<i64>::get_description(false)
+                    .await
+                    .write("description", "Minimal condition"),
+            )
+            .write(
+                "several_enum",
+                Vec::<String>::get_description(false)
+                    .await
+                    .write("description", "Several enum values")
+                    .write_iter("enum", ["Value1", "Value2", "Value3"].into_iter()),
+            )
+            .write(
+                "several_enum_opt",
+                Option::<Vec<String>>::get_description(false)
+                    .await
+                    .write("description", "Several enum values optional")
+                    .write_iter("enum", ["Value1", "Value2", "Value3"].into_iter()),
+            );
+        my_ai_agent::my_json::json_writer::JsonObjectWriter::new()
+            .write("type", "object")
+            .write("properties", props)
+            .write_iter(
+                "required",
+                ["city", "other_condition", "several_enum"].into_iter(),
+            )
+            .write("additionalProperties", false)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use my_ai_agent::models::*;
 
     use crate::tests::MyRequestModel;
-    use my_ai_agent::json_schema::JsonSchemaDescription;
+    use my_ai_agent::json_schema::JsonTypeDescription;
 
     #[tokio::test]
     async fn test_generation() {

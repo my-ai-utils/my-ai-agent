@@ -25,7 +25,7 @@ impl ToolFunctions {
     }
 
     pub async fn register_function<
-        ParamType: JsonSchemaDescription + DeserializeOwned + Send + Sync + 'static,
+        ParamType: JsonTypeDescription + DeserializeOwned + Send + Sync + 'static,
         TToolFunction: ToolFunction<ParamType> + Send + Sync + 'static,
     >(
         &mut self,
@@ -36,8 +36,10 @@ impl ToolFunctions {
         let func_json_description = FunctionDescriptionJsonModel {
             name: func_name.to_string(),
             description: func_description.to_string(),
-            parameters: serde_json::from_str(ParamType::get_description().await.build().as_str())
-                .unwrap(),
+            parameters: serde_json::from_str(
+                ParamType::get_description(false).await.build().as_str(),
+            )
+            .unwrap(),
             strict: None,
         };
 

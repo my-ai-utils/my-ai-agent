@@ -50,7 +50,7 @@ impl MyAutoGen {
     }
 
     pub async fn register_function<
-        ParamType: JsonSchemaDescription + DeserializeOwned + Send + Sync + 'static,
+        ParamType: JsonTypeDescription + DeserializeOwned + Send + Sync + 'static,
         TToolFunction: ToolFunction<ParamType> + Send + Sync + 'static,
     >(
         &self,
