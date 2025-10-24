@@ -5,13 +5,18 @@ use super::*;
 #[async_trait::async_trait]
 impl<T: JsonTypeDescription> JsonTypeDescription for Option<T> {
     async fn get_description(has_default: bool) -> my_json::json_writer::JsonObjectWriter {
-        if has_default {
-            T::get_description(false).await
-        } else {
-            T::get_description(false)
-                .await
-                .write("default", JsonNullValue)
+        let tp = T::get_description(false).await;
+
+        let mut result =
+            my_json::json_writer::JsonObjectWriter::new().write_json_array("any", |arr| {
+                arr.write_json_object(|o| o.write("json", "null"))
+                    .write_ref(&tp)
+            });
+        if !has_default {
+            result = result.write("default", JsonNullValue);
         }
+
+        result
     }
 }
 
