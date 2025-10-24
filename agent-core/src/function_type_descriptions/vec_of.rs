@@ -14,6 +14,16 @@ impl<T: GetJsonTypeName> FunctionTypeDescription for Vec<T> {
     }
 }
 
+#[async_trait::async_trait]
+impl<T: crate::JsonSchemaDescription> crate::JsonSchemaDescription for Vec<T> {
+    async fn get_description() -> my_json::json_writer::JsonObjectWriter {
+        let description = T::get_description().await;
+        my_json::json_writer::JsonObjectWriter::new()
+            .write("type", "array")
+            .write("items", description)
+    }
+}
+
 async fn generate_description_of_vec_parameter<Tp: GetJsonTypeName + FunctionTypeDescription>(
     description: Option<&str>,
     default: Option<&str>,
