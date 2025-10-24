@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use serde::de::DeserializeOwned;
 
-use crate::JsonSchemaDescription;
+use crate::json_schema::*;
 
 #[async_trait::async_trait]
 pub trait ToolFunction<ParamsType: JsonSchemaDescription> {

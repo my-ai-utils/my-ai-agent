@@ -1,7 +1,7 @@
 use rust_extensions::StrOrString;
 
 #[async_trait::async_trait]
-pub trait FunctionTypeDescription {
+pub trait JsonTypeDescription {
     async fn get_type_description(
         description: Option<&str>,
         default: Option<&str>,

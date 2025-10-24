@@ -1,10 +1,10 @@
 use my_json::json_writer::JsonObjectWriter;
 use rust_extensions::StrOrString;
 
-use crate::{FunctionTypeDescription, GetJsonTypeName};
+use super::*;
 
 #[async_trait::async_trait]
-impl<T: GetJsonTypeName> FunctionTypeDescription for Option<Vec<T>> {
+impl<T: GetJsonTypeName> JsonTypeDescription for Option<Vec<T>> {
     async fn get_type_description(
         description: Option<&str>,
         default: Option<&str>,

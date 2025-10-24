@@ -2,10 +2,9 @@ use std::sync::Arc;
 
 use serde::de::DeserializeOwned;
 
-use crate::{
-    JsonSchemaDescription,
-    my_auto_gen::{ToolFunction, ToolFunctionAbstract, ToolFunctionHolder},
-};
+use crate::my_auto_gen::{ToolFunction, ToolFunctionAbstract, ToolFunctionHolder};
+
+use crate::json_schema::*;
 
 use ai_models::*;
 

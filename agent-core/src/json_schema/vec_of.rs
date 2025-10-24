@@ -1,10 +1,10 @@
 use my_json::json_writer::JsonObjectWriter;
 use rust_extensions::StrOrString;
 
-use crate::{FunctionTypeDescription, GetJsonTypeName};
+use super::*;
 
 #[async_trait::async_trait]
-impl<T: GetJsonTypeName> FunctionTypeDescription for Vec<T> {
+impl<T: GetJsonTypeName> JsonTypeDescription for Vec<T> {
     async fn get_type_description(
         description: Option<&str>,
         default: Option<&str>,
@@ -15,7 +15,7 @@ impl<T: GetJsonTypeName> FunctionTypeDescription for Vec<T> {
 }
 
 #[async_trait::async_trait]
-impl<T: crate::JsonSchemaDescription> crate::JsonSchemaDescription for Vec<T> {
+impl<T: JsonSchemaDescription> JsonSchemaDescription for Vec<T> {
     async fn get_description() -> my_json::json_writer::JsonObjectWriter {
         let description = T::get_description().await;
         my_json::json_writer::JsonObjectWriter::new()
@@ -24,7 +24,7 @@ impl<T: crate::JsonSchemaDescription> crate::JsonSchemaDescription for Vec<T> {
     }
 }
 
-async fn generate_description_of_vec_parameter<Tp: GetJsonTypeName + FunctionTypeDescription>(
+async fn generate_description_of_vec_parameter<Tp: GetJsonTypeName + JsonTypeDescription>(
     description: Option<&str>,
     default: Option<&str>,
     enum_data: Option<Vec<StrOrString<'static>>>,

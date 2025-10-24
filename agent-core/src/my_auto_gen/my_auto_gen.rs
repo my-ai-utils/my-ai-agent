@@ -5,12 +5,14 @@ use serde::de::DeserializeOwned;
 use tokio::sync::RwLock;
 
 use crate::{
-    JsonSchemaDescription, OpenAiRequestBodyBuilder,
+    OpenAiRequestBodyBuilder,
     my_auto_gen::{
         AutoGenSettings, MyAutoGenInner, OpenAiResponseStream, RemoteToolFunctions,
         RemoteToolFunctionsHandler, ToolFunction, ToolFunctions,
     },
 };
+
+use crate::json_schema::*;
 
 use super::argentic_response::*;
 

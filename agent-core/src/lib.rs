@@ -1,7 +1,6 @@
 pub mod http_chunked_body_reader;
 
-mod function_type_descriptions;
-pub use function_type_descriptions::*;
+pub mod json_schema;
 
 mod request_builder;
 pub use request_builder::*;

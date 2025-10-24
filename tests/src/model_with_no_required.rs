@@ -14,7 +14,7 @@ pub struct MyRequestModelNoRequired {
 
 #[cfg(test)]
 mod tests {
-    use my_ai_agent::{my_json, JsonSchemaDescription};
+    use my_ai_agent::{json_schema::*, my_json};
 
     use crate::model_with_no_required::MyRequestModelNoRequired;
 
