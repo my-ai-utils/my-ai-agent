@@ -48,7 +48,7 @@ pub fn generate(input: &syn::DeriveInput) -> Result<TokenStream, syn::Error> {
 
       }
 
-
+      #[async_trait::async_trait]
       impl my_ai_agent::json_schema::GetJsonTypeName for #struct_name{
             const TYPE_NAME: &'static str = "object";
             const OPTIONAL:bool = false;
