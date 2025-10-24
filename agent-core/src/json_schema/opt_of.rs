@@ -1,11 +1,15 @@
 use my_json::json_writer::JsonNullValue;
+use rust_extensions::StrOrString;
 
 use super::*;
 
 #[async_trait::async_trait]
 impl<T: JsonTypeDescription> JsonTypeDescription for Option<T> {
-    async fn get_description(has_default: bool) -> my_json::json_writer::JsonObjectWriter {
-        let tp = T::get_description(false).await;
+    async fn get_description(
+        has_default: bool,
+        with_enum: Option<Vec<StrOrString<'static>>>,
+    ) -> my_json::json_writer::JsonObjectWriter {
+        let tp = T::get_description(false, with_enum).await;
 
         let mut result =
             my_json::json_writer::JsonObjectWriter::new().write_json_array("any", |arr| {

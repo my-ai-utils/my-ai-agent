@@ -32,7 +32,8 @@ pub fn generate(input: &syn::DeriveInput) -> Result<TokenStream, syn::Error> {
         #[async_trait::async_trait]
         impl my_ai_agent::json_schema::JsonTypeDescription  for #struct_name{
 
-        async fn get_description(_has_default: bool) -> my_ai_agent::my_json::json_writer::JsonObjectWriter {
+        async fn get_description(_has_default: bool,
+          with_enum: Option<Vec<rust_extensions::StrOrString<'static>>>,) -> my_ai_agent::my_json::json_writer::JsonObjectWriter {
         use  my_ai_agent::json_schema::JsonTypeDescription;
 
         let props = my_ai_agent::my_json::json_writer::JsonObjectWriter::new()
