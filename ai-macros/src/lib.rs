@@ -1,12 +1,12 @@
 use proc_macro::TokenStream;
 
 extern crate proc_macro;
-mod tools_model_description;
+mod apply_json_schema;
 
-#[proc_macro_derive(OpenAiFunctionModel, attributes(property, function_description))]
-pub fn open_ai_function_description(input: TokenStream) -> TokenStream {
+#[proc_macro_derive(ApplyJsonSchema, attributes(property))]
+pub fn apply_json_schema(input: TokenStream) -> TokenStream {
     let ast = syn::parse(input).unwrap();
-    match crate::tools_model_description::generate(&ast) {
+    match crate::apply_json_schema::generate(&ast) {
         Ok(result) => result.into(),
         Err(err) => err.into_compile_error().into(),
     }

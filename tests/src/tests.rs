@@ -1,11 +1,10 @@
 #![allow(warnings)]
 
-use my_ai_agent::macros::OpenAiFunctionModel;
+use my_ai_agent::macros::ApplyJsonSchema;
 use rust_extensions::StrOrString;
 
-#[derive(OpenAiFunctionModel)]
+#[derive(ApplyJsonSchema)]
 pub struct MyRequestModel {
-    #[function_description(name:"filter_showrooms", description: "Filters company location data from a JSON file based on criteria like city (extracted from address), specific service offered (e.g., Sales, Repairs), and geolocation ranges (latitude/longitude).")]
     #[property(description: "city")]
     pub city: String,
     #[property(description: "service")]

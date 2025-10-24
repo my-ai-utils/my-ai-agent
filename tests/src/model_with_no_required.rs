@@ -1,10 +1,10 @@
 #![allow(warnings)]
 
-use my_ai_agent::macros::OpenAiFunctionModel;
+use my_ai_agent::macros::ApplyJsonSchema;
 use my_ai_agent::my_json::json_writer::EmptyJsonArray;
 use rust_extensions::StrOrString;
 
-#[derive(OpenAiFunctionModel)]
+#[derive(ApplyJsonSchema)]
 pub struct MyRequestModelNoRequired {
     #[property(description: "city description")]
     pub city: Option<String>,
