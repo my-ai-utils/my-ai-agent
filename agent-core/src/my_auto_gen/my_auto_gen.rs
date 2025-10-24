@@ -5,7 +5,7 @@ use serde::de::DeserializeOwned;
 use tokio::sync::RwLock;
 
 use crate::{
-    OpenAiRequestBodyBuilder,
+    OpenAiRequestBodyBuilder, ToolDefinition,
     my_auto_gen::{
         AutoGenSettings, MyAutoGenInner, OpenAiResponseStream, RemoteToolFunctions,
         RemoteToolFunctionsHandler, ToolFunction, ToolFunctions,
@@ -51,11 +51,9 @@ impl MyAutoGen {
 
     pub async fn register_function<
         ParamType: JsonTypeDescription + DeserializeOwned + Send + Sync + 'static,
-        TToolFunction: ToolFunction<ParamType> + Send + Sync + 'static,
+        TToolFunction: ToolFunction<ParamType> + Send + Sync + 'static + ToolDefinition,
     >(
         &self,
-        func_name: &'static str,
-        func_description: &'static str,
         tool_function: Arc<TToolFunction>,
     ) {
         let mut inner = self.inner.write().await;
@@ -72,7 +70,11 @@ impl MyAutoGen {
         };
 
         tool_functions
-            .register_function(func_name, func_description, tool_function)
+            .register_function(
+                TToolFunction::FUNC_NAME,
+                TToolFunction::DESCRIPTION,
+                tool_function,
+            )
             .await;
     }
 

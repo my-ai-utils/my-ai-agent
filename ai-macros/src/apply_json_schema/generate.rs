@@ -27,8 +27,6 @@ pub fn generate(input: &syn::DeriveInput) -> Result<TokenStream, syn::Error> {
         quote::quote! {  .write("required", my_ai_agent::my_json::json_writer::EmptyJsonArray)}
     };
 
-    let struct_name_as_string = struct_name.to_string();
-
     let result = quote::quote! {
 
         #[async_trait::async_trait]
