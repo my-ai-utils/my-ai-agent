@@ -2,10 +2,10 @@ use std::sync::Arc;
 
 use serde::de::DeserializeOwned;
 
-use crate::FunctionToolCallDescription;
+use crate::JsonSchemaDescription;
 
 #[async_trait::async_trait]
-pub trait ToolFunction<ParamsType: FunctionToolCallDescription> {
+pub trait ToolFunction<ParamsType: JsonSchemaDescription> {
     async fn callback(&self, params: ParamsType, ctx: &str) -> Result<String, String>;
 }
 
@@ -14,12 +14,12 @@ pub trait ToolFunctionAbstract {
     async fn call(&self, func: &str, params: &str, ctx: &str) -> Result<String, String>;
 }
 
-pub struct ToolFunctionHolder<ParamsType: FunctionToolCallDescription> {
+pub struct ToolFunctionHolder<ParamsType: JsonSchemaDescription> {
     inner: Arc<dyn ToolFunction<ParamsType> + Send + Sync + 'static>,
     pub func_name: &'static str,
 }
 
-impl<ParamsType: FunctionToolCallDescription> ToolFunctionHolder<ParamsType> {
+impl<ParamsType: JsonSchemaDescription> ToolFunctionHolder<ParamsType> {
     pub fn new(
         func_name: &'static str,
         func: Arc<dyn ToolFunction<ParamsType> + Send + Sync + 'static>,
@@ -32,7 +32,7 @@ impl<ParamsType: FunctionToolCallDescription> ToolFunctionHolder<ParamsType> {
 }
 
 #[async_trait::async_trait]
-impl<ParamsType: FunctionToolCallDescription + DeserializeOwned + Send + Sync + 'static>
+impl<ParamsType: JsonSchemaDescription + DeserializeOwned + Send + Sync + 'static>
     ToolFunctionAbstract for ToolFunctionHolder<ParamsType>
 {
     async fn call(&self, fn_name: &str, params: &str, ctx: &str) -> Result<String, String> {

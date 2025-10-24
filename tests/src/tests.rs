@@ -36,7 +36,7 @@ mod tests {
     use my_ai_agent::models::*;
 
     use crate::tests::MyRequestModel;
-    use my_ai_agent::FunctionToolCallDescription;
+    use my_ai_agent::JsonSchemaDescription;
 
     #[tokio::test]
     async fn test_generation() {
