@@ -65,6 +65,7 @@ impl OpenAiRequestModel {
                 result.verbosity = settings.verbosity;
             }
             SettingsMode::Qwen(_) => {}
+            SettingsMode::Zai => {}
         }
 
         result
