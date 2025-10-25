@@ -20,9 +20,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_generation() {
-        let description = MyRequestModelNoRequired::get_description(false, None)
-            .await
-            .build();
+        let description = MyRequestModelNoRequired::get_json_schema().await.build();
 
         println!("{}", description.as_str());
 

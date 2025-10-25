@@ -12,6 +12,7 @@ pub trait JsonTypeDescription {
 impl JsonTypeDescription for u8 {
     async fn get_description(
         _has_default: bool,
+
         with_enum: Option<Vec<StrOrString<'static>>>,
     ) -> my_json::json_writer::JsonObjectWriter {
         my_json::json_writer::JsonObjectWriter::new()

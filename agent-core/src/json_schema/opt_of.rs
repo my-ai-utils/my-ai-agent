@@ -9,18 +9,10 @@ impl<T: JsonTypeDescription> JsonTypeDescription for Option<T> {
         has_default: bool,
         with_enum: Option<Vec<StrOrString<'static>>>,
     ) -> my_json::json_writer::JsonObjectWriter {
-        let tp = T::get_description(false, with_enum).await;
-
-        let mut result =
-            my_json::json_writer::JsonObjectWriter::new().write_json_array("any", |arr| {
-                arr.write_json_object(|o| o.write("json", "null"))
-                    .write_ref(&tp)
-            });
-        if !has_default {
-            result = result.write("default", JsonNullValue);
-        }
-
-        result
+        T::get_description(false, with_enum)
+            .await
+            .write("nullable", true)
+            .write_if("default", JsonNullValue, !has_default)
     }
 }
 

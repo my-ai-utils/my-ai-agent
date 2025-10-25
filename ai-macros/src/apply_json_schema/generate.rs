@@ -29,6 +29,14 @@ pub fn generate(input: &syn::DeriveInput) -> Result<TokenStream, syn::Error> {
 
     let result = quote::quote! {
 
+        impl #struct_name{
+
+            pub async fn get_json_schema()->my_ai_agent::my_json::json_writer::JsonObjectWriter{
+                use  my_ai_agent::json_schema::JsonTypeDescription;
+                Self::get_description(false, None).await
+            }
+        }
+
         #[async_trait::async_trait]
         impl my_ai_agent::json_schema::JsonTypeDescription  for #struct_name{
 

@@ -14,32 +14,3 @@ impl<Tp: JsonTypeDescription> JsonTypeDescription for Vec<Tp> {
             .write("items", items)
     }
 }
-
-/*
-#[async_trait::async_trait]
-impl<T: JsonSchemaDescription> JsonSchemaDescription for Vec<T> {
-    async fn get_description() -> my_json::json_writer::JsonObjectWriter {
-        let description = T::get_description().await;
-
-        my_json::json_writer::JsonObjectWriter::new()
-            .write("type", "array")
-            .write("items", description)
-    }
-}
-
-pub fn fill_array_sub_elements<Tp: JsonSchemaDescription>(
-    writer: JsonObjectWriter,
-    enum_data: &Option<Vec<StrOrString<'static>>>,
-) -> JsonObjectWriter {
-    let tp = Tp::TYPE_NAME;
-    writer.write_json_object("items", move |items| {
-        let mut items = items.write("type", tp.as_str());
-        if let Some(enum_data) = enum_data {
-            let enums = enum_data.iter().map(|itm| itm.as_str());
-            items = items.write_iter("enum", enums);
-        }
-
-        items
-    })
-}
- */
