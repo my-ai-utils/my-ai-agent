@@ -36,7 +36,7 @@ impl ToolFunctions {
             name: TToolFunction::FUNC_NAME,
             description: TToolFunction::DESCRIPTION,
             parameters: serde_json::from_str(
-                ParamType::get_description(false, None)
+                ParamType::get_description(false, None, false)
                     .await
                     .build()
                     .as_str(),

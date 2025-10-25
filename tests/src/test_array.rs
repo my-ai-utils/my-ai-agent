@@ -26,7 +26,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_array_generation() {
-        let description = RootObject::get_json_schema().await;
+        let description = RootObject::get_json_schema(false).await;
         let json = description.build();
 
         println!("{}", json);

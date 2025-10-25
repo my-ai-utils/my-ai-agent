@@ -54,12 +54,12 @@ pub fn generate_property(prop: StructProperty) -> Result<TokenStream, syn::Error
     let result = if let PropertyType::OptionOf(opt_tp) = prop.ty {
         let as_token = opt_tp.get_token_stream();
         quote::quote! {
-          .write(#prop_name, Option::<#as_token>::get_description(#has_default, #enum_to_render).await.write("description", #description) #write_default)
+          .write(#prop_name, Option::<#as_token>::get_description(#has_default, #enum_to_render, output).await.write("description", #description) #write_default)
         }
     } else {
         let token = prop.ty.get_token_stream();
         quote::quote! {
-            .write(#prop_name, #token::get_description(#has_default, #enum_to_render).await.write("description", #description)  #write_default)
+            .write(#prop_name, #token::get_description(#has_default, #enum_to_render, output).await.write("description", #description)  #write_default)
         }
     };
 

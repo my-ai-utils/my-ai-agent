@@ -15,7 +15,7 @@ mod test {
 
     #[tokio::test]
     async fn test() {
-        let data = MyEnuModel::get_json_schema().await;
+        let data = MyEnuModel::get_json_schema(false).await;
 
         println!("{}", data.build());
 

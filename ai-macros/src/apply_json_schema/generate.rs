@@ -31,9 +31,9 @@ pub fn generate(input: &syn::DeriveInput) -> Result<TokenStream, syn::Error> {
 
         impl #struct_name{
 
-            pub async fn get_json_schema()->my_ai_agent::my_json::json_writer::JsonObjectWriter{
+            pub async fn get_json_schema(output: bool)->my_ai_agent::my_json::json_writer::JsonObjectWriter{
                 use  my_ai_agent::json_schema::JsonTypeDescription;
-                Self::get_description(false, None).await
+                Self::get_description(false, None, output).await
             }
         }
 
@@ -41,7 +41,8 @@ pub fn generate(input: &syn::DeriveInput) -> Result<TokenStream, syn::Error> {
         impl my_ai_agent::json_schema::JsonTypeDescription  for #struct_name{
 
         async fn get_description(_has_default: bool,
-          with_enum: Option<Vec<my_ai_agent::rust_extensions::StrOrString<'static>>>,) -> my_ai_agent::my_json::json_writer::JsonObjectWriter {
+          with_enum: Option<Vec<my_ai_agent::rust_extensions::StrOrString<'static>>>,
+          output: bool) -> my_ai_agent::my_json::json_writer::JsonObjectWriter {
         use  my_ai_agent::json_schema::JsonTypeDescription;
 
         let props = my_ai_agent::my_json::json_writer::JsonObjectWriter::new()
