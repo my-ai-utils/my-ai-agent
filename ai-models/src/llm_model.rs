@@ -20,7 +20,7 @@ impl LlmModel {
             LlmModel::Gpt5Mini(_) => "gpt-5-mini",
             LlmModel::Gpt5Nano(_) => "gpt-5-nano",
             LlmModel::Qwen3_30bA3b(_) => "Qwen/Qwen3-30B-A3B",
-            LlmModel::ZaiGlm4_5 => "zai-org/glm-4.5",
+            LlmModel::ZaiGlm4_5 => "zai-org/GLM-4.5",
         }
     }
 
