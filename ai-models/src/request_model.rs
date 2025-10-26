@@ -66,6 +66,7 @@ impl OpenAiRequestModel {
             }
             SettingsMode::Qwen(_) => {}
             SettingsMode::Zai => {}
+            SettingsMode::NebiusZai => {}
         }
 
         result

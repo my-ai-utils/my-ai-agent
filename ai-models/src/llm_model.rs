@@ -9,6 +9,7 @@ pub enum LlmModel {
     Gpt5Nano(Gpt5Settings),
     Qwen3_30bA3b(QwenSettings),
     ZaiGlm4_5,
+    ZaiGlm4_6,
 }
 
 impl LlmModel {
@@ -21,6 +22,7 @@ impl LlmModel {
             LlmModel::Gpt5Nano(_) => "gpt-5-nano",
             LlmModel::Qwen3_30bA3b(_) => "Qwen/Qwen3-30B-A3B",
             LlmModel::ZaiGlm4_5 => "zai-org/GLM-4.5",
+            LlmModel::ZaiGlm4_6 => "glm-4.6",
         }
     }
 
@@ -50,7 +52,8 @@ impl LlmModel {
             LlmModel::Gpt5Mini(gpt5_settings) => SettingsMode::Gpt5(*gpt5_settings),
             LlmModel::Gpt5Nano(gpt5_settings) => SettingsMode::Gpt5(*gpt5_settings),
             LlmModel::Qwen3_30bA3b(settings) => SettingsMode::Qwen(*settings),
-            LlmModel::ZaiGlm4_5 => SettingsMode::Zai,
+            LlmModel::ZaiGlm4_5 => SettingsMode::NebiusZai,
+            LlmModel::ZaiGlm4_6 => SettingsMode::Zai,
         }
     }
 
@@ -60,6 +63,7 @@ impl LlmModel {
             SettingsMode::Gpt5(_) => None,
             SettingsMode::Qwen(qwen_settings) => Some(qwen_settings.think),
             SettingsMode::Zai => None,
+            SettingsMode::NebiusZai => None,
         }
     }
 }
@@ -68,5 +72,6 @@ pub enum SettingsMode {
     Gpt4(Gpt4Settings),
     Gpt5(Gpt5Settings),
     Qwen(QwenSettings),
+    NebiusZai,
     Zai,
 }

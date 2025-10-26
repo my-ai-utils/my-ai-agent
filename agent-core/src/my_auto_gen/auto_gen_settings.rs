@@ -42,4 +42,14 @@ impl AutoGenSettings {
 
         Self::HttpRequest(model)
     }
+
+    pub fn create_as_zai(api_key: Option<String>, do_not_reuse_connection: bool) -> Self {
+        let model = HttpRequestSettingsModel {
+            url: "https://api.z.ai/api/paas/v4/chat/completions".into(),
+            api_key,
+            do_not_reuse_connection: Some(do_not_reuse_connection),
+        };
+
+        Self::HttpRequest(model)
+    }
 }
