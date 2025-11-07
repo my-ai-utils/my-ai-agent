@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use crate::{
-    OpenAiRequestBodyBuilder,
+    LlmRequestBuilder,
     my_auto_gen::{RemoteToolFunctionsHandler, ToolFunctions},
 };
 
@@ -28,7 +28,7 @@ impl MyAutoGenInner {
         }
     }
 
-    pub async fn populate_request_builder(&self, rb: &OpenAiRequestBodyBuilder) {
+    pub async fn populate_request_builder(&self, rb: &LlmRequestBuilder) {
         match &self {
             MyAutoGenInner::NotInitialized => {}
             MyAutoGenInner::LocalToolFunctions(local_tool_functions) => {

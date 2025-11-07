@@ -6,15 +6,15 @@ use crate::my_auto_gen::{TechRequestLogItem, TechRequestLogger, ToolCallModel};
 use super::*;
 use ai_models::*;
 
-pub struct OpenAiRequestBodyBuilder {
-    pub(crate) inner: Mutex<OpenAiRequestBodyBuilderInner>,
+pub struct LlmRequestBuilder {
+    pub(crate) inner: Mutex<LlmRequestBuilderInner>,
     pub llm_model: LlmModel,
 }
 
-impl OpenAiRequestBodyBuilder {
+impl LlmRequestBuilder {
     pub fn new(llm_model: LlmModel) -> Self {
         Self {
-            inner: Mutex::new(OpenAiRequestBodyBuilderInner::new(llm_model)),
+            inner: Mutex::new(LlmRequestBuilderInner::new(llm_model)),
             llm_model,
         }
     }
@@ -24,7 +24,7 @@ impl OpenAiRequestBodyBuilder {
         llm_model: LlmModel,
     ) -> Self {
         Self {
-            inner: Mutex::new(OpenAiRequestBodyBuilderInner::new_with_system_prompt(
+            inner: Mutex::new(LlmRequestBuilderInner::new_with_system_prompt(
                 system_prompt,
                 llm_model,
             )),
@@ -40,7 +40,7 @@ impl OpenAiRequestBodyBuilder {
     ) -> Self {
         Self {
             llm_model,
-            inner: Mutex::new(OpenAiRequestBodyBuilderInner::from_history(
+            inner: Mutex::new(LlmRequestBuilderInner::from_history(
                 system_prompt,
                 summary_message,
                 history,
@@ -93,7 +93,7 @@ impl OpenAiRequestBodyBuilder {
         write_access.add_tools(tools);
     }
 
-    pub async fn modify(&self, rb: impl Fn(&mut OpenAiRequestBodyBuilderInner)) {
+    pub async fn modify(&self, rb: impl Fn(&mut LlmRequestBuilderInner)) {
         let mut write_access = self.inner.lock().await;
         rb(&mut write_access);
     }
@@ -105,7 +105,7 @@ impl OpenAiRequestBodyBuilder {
 
     pub async fn modify_and_get_result<TResult>(
         &self,
-        rb: impl Fn(&mut OpenAiRequestBodyBuilderInner) -> TResult,
+        rb: impl Fn(&mut LlmRequestBuilderInner) -> TResult,
     ) -> TResult {
         let mut write_access = self.inner.lock().await;
         rb(&mut write_access)
@@ -113,7 +113,7 @@ impl OpenAiRequestBodyBuilder {
 
     pub async fn get<TResult>(
         &self,
-        callback: impl Fn(&OpenAiRequestBodyBuilderInner) -> TResult,
+        callback: impl Fn(&LlmRequestBuilderInner) -> TResult,
     ) -> TResult {
         let read_access = self.inner.lock().await;
         callback(&read_access)

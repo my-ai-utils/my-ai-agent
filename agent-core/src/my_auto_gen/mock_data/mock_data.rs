@@ -24,7 +24,7 @@ use std::sync::Arc;
 use tokio::sync::Mutex;
 
 use crate::{
-    OpenAiRequestBodyBuilder,
+    LlmRequestBuilder,
     my_auto_gen::{OpenAiInnerResponseStream, OpenAiNetworkStream},
 };
 
@@ -39,7 +39,7 @@ async fn test() {
     let network_stream = OpenAiNetworkStream::Mock(data.clone());
     let mut stream = OpenAiInnerResponseStream::new(network_stream);
 
-    let rb = OpenAiRequestBodyBuilder::new(LlmModel::Gpt4o(Gpt4Settings::default()));
+    let rb = LlmRequestBuilder::new(LlmModel::Gpt4o(Gpt4Settings::default()));
     while let Some(chunk) = stream.get_next_chunk(&rb).await.unwrap() {
         println!("{:?}", chunk);
     }
@@ -47,7 +47,7 @@ async fn test() {
     let network_stream = OpenAiNetworkStream::Mock(data.clone());
     let mut stream = OpenAiInnerResponseStream::new(network_stream);
 
-    let rb = OpenAiRequestBodyBuilder::new(LlmModel::Gpt4o(Gpt4Settings::default()));
+    let rb = LlmRequestBuilder::new(LlmModel::Gpt4o(Gpt4Settings::default()));
     while let Some(chunk) = stream.get_next_chunk(&rb).await.unwrap() {
         println!("{:?}", chunk);
     }

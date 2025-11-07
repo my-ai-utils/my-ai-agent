@@ -4,13 +4,13 @@ use flurl::{FlUrl, FlUrlResponse, body::FlUrlBody};
 use rust_extensions::{Logger, date_time::DateTimeAsMicroseconds};
 use tokio::sync::{Mutex, RwLock};
 
-use crate::{OpenAiRequestBodyBuilder, my_auto_gen::*};
+use crate::{LlmRequestBuilder, my_auto_gen::*};
 use ai_models::*;
 
 pub async fn execute_request_as_stream(
     settings: AutoGenSettings,
     sender: tokio::sync::mpsc::Sender<Result<OpenAiStreamChunk, String>>,
-    rb: Arc<OpenAiRequestBodyBuilder>,
+    rb: Arc<LlmRequestBuilder>,
     inner: Arc<RwLock<MyAutoGenInner>>,
     ctx: String,
     logger: Arc<dyn Logger + Send + Sync>,
@@ -129,7 +129,7 @@ pub async fn execute_request_as_stream(
 
 async fn prepare_open_ai_fl_url_streamed_request(
     settings: &HttpRequestSettingsModel,
-    rb: &OpenAiRequestBodyBuilder,
+    rb: &LlmRequestBuilder,
     logger: &Arc<dyn Logger + Send + Sync>,
     clients_cache: &Arc<flurl::FlUrlHttpClientsCache>,
 ) -> Result<OpenAiInnerResponseStream, String> {
@@ -160,7 +160,7 @@ async fn prepare_open_ai_fl_url_streamed_request(
 
 async fn prepare_open_ai_fl_url(
     settings: &HttpRequestSettingsModel,
-    rb: &OpenAiRequestBodyBuilder,
+    rb: &LlmRequestBuilder,
     logger: &Arc<dyn Logger + Send + Sync>,
     clients_cache: &Arc<flurl::FlUrlHttpClientsCache>,
 ) -> Result<FlUrlResponse, String> {

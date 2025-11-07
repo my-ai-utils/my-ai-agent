@@ -1,4 +1,4 @@
-use crate::{OpenAiRequestBodyBuilder, my_auto_gen::TechRequestLogItem};
+use crate::{LlmRequestBuilder, my_auto_gen::TechRequestLogItem};
 
 use super::*;
 use rust_extensions::date_time::DateTimeAsMicroseconds;
@@ -22,7 +22,7 @@ impl OpenAiInnerResponseStream {
 
     pub async fn get_next_chunk(
         &mut self,
-        rb: &OpenAiRequestBodyBuilder,
+        rb: &LlmRequestBuilder,
     ) -> Result<Option<OpenAiStreamHttpChunk>, String> {
         if self.eof {
             return Ok(None);

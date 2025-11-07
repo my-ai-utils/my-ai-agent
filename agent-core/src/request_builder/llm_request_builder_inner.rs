@@ -8,14 +8,14 @@ const QWEN_NO_THINK_PREFIX: &'static str = "/no_think";
 
 const QWEN_NO_THINK_PREFIX_WITH_CL_CR: &'static str = "/no_think\n";
 
-pub struct OpenAiRequestBodyBuilderInner {
+pub struct LlmRequestBuilderInner {
     tools: Vec<ToolsDescriptionJsonModel>,
     request_model: OpenAiRequestModel,
     llm_model: LlmModel,
     pub(crate) tech_log: TechRequestLogger,
 }
 
-impl OpenAiRequestBodyBuilderInner {
+impl LlmRequestBuilderInner {
     pub fn new(llm_model: LlmModel) -> Self {
         Self {
             llm_model,

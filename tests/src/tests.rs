@@ -47,7 +47,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_builder_and_model() {
-        let mut builder = my_ai_agent::OpenAiRequestBodyBuilder::new_with_system_prompt(
+        let mut builder = my_ai_agent::LlmRequestBuilder::new_with_system_prompt(
             "test_system_prompt_data",
             my_ai_agent::models::LlmModel::Gpt4o(my_ai_agent::models::Gpt4Settings::default()),
         );

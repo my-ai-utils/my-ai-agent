@@ -3,11 +3,11 @@ use std::{sync::Arc, time::Duration};
 use flurl::{FlUrl, body::FlUrlBody};
 use rust_extensions::{base64::IntoBase64, date_time::DateTimeAsMicroseconds};
 
-use crate::{OpenAiRequestBodyBuilder, my_auto_gen::*};
+use crate::{LlmRequestBuilder, my_auto_gen::*};
 
 pub async fn execute_fl_url_request(
     settings: &HttpRequestSettingsModel,
-    rb: &OpenAiRequestBodyBuilder,
+    rb: &LlmRequestBuilder,
     http_clients_cache: Arc<flurl::FlUrlHttpClientsCache>,
 ) -> Result<(OpenAiRespModel, String), String> {
     let mut fl_url = FlUrl::new(settings.url.as_str())

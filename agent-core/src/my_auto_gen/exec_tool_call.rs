@@ -1,13 +1,13 @@
 use tokio::sync::RwLock;
 
 use crate::{
-    OpenAiRequestBodyBuilder,
+    LlmRequestBuilder,
     my_auto_gen::{MyAutoGenInner, ToolCallModel, ToolCallsResult},
 };
 
 pub async fn exec_tool_call(
     tool_call_models: &[ToolCallModel],
-    rb: &OpenAiRequestBodyBuilder,
+    rb: &LlmRequestBuilder,
     inner: &RwLock<MyAutoGenInner>,
     ctx: &str,
 ) -> Result<Vec<ToolCallsResult>, String> {

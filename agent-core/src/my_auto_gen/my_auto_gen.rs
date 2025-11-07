@@ -5,7 +5,7 @@ use serde::de::DeserializeOwned;
 use tokio::sync::RwLock;
 
 use crate::{
-    OpenAiRequestBodyBuilder, ToolDefinition,
+    LlmRequestBuilder, ToolDefinition,
     my_auto_gen::{
         AutoGenSettings, MyAutoGenInner, OpenAiResponseStream, RemoteToolFunctions,
         RemoteToolFunctionsHandler, ToolFunction, ToolFunctions,
@@ -75,7 +75,7 @@ impl MyAutoGen {
     pub async fn execute(
         &self,
         settings: &AutoGenSettings,
-        rb: &OpenAiRequestBodyBuilder,
+        rb: &LlmRequestBuilder,
         ctx: &str,
     ) -> Result<Vec<super::argentic_response::ToolCallsResult>, String> {
         {
@@ -142,7 +142,7 @@ impl MyAutoGen {
     pub async fn execute_request_as_stream(
         &self,
         settings: &AutoGenSettings,
-        rb: Arc<OpenAiRequestBodyBuilder>,
+        rb: Arc<LlmRequestBuilder>,
         ctx: &str,
     ) -> Result<OpenAiResponseStream, String> {
         {
