@@ -9,10 +9,10 @@ pub enum OpenAiResponse<'s> {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct OpenAiRespModel {
-    pub id: String,
-    pub object: String,
-    pub created: i64,
-    pub model: String,
+    pub id: Option<String>,
+    pub object: Option<String>,
+    pub created: Option<i64>,
+    pub model: Option<String>,
     pub choices: Vec<OpenAiChoiceModel>,
 }
 
