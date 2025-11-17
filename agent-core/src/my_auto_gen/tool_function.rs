@@ -40,8 +40,7 @@ impl<ParamsType: JsonTypeDescription + DeserializeOwned + Send + Sync + 'static>
         match data {
             Ok(data) => self.inner.callback(data, ctx).await,
             Err(err) => Err(format!(
-                "Can not deserialize parameters for fn {}. Err: {}",
-                fn_name, err
+                "Can not deserialize parameters {params} for fn {fn_name}. Err: {err}",
             )),
         }
     }
