@@ -62,7 +62,11 @@ pub async fn execute_fl_url_request(
             return Ok((model, body));
         }
         Err(err) => {
-            println!("Can not deserialize JsonModel. Err: `{}`", err);
+            println!(
+                "Can not deserialize JsonModel. Status code: `{status_code}`. Err: `{}`",
+                err
+            );
+            println!("Object: {:?}", std::str::from_utf8(body.as_slice()));
             panic!("Can not deserialize JsonModel. Err: `{}`", err);
         }
     }
