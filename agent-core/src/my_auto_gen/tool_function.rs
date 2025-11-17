@@ -1,8 +1,6 @@
 use std::sync::Arc;
 
-use serde::de::DeserializeOwned;
-
-use crate::json_schema::*;
+use crate::{json_schema::*, my_auto_gen::deserializer::impl_from_str::DeserializeToolCallParam};
 
 #[async_trait::async_trait]
 pub trait ToolFunction<ParamsType: JsonTypeDescription> {
@@ -32,12 +30,11 @@ impl<ParamsType: JsonTypeDescription> ToolFunctionHolder<ParamsType> {
 }
 
 #[async_trait::async_trait]
-impl<ParamsType: JsonTypeDescription + DeserializeOwned + Send + Sync + 'static>
+impl<ParamsType: JsonTypeDescription + DeserializeToolCallParam + Send + Sync + 'static>
     ToolFunctionAbstract for ToolFunctionHolder<ParamsType>
 {
     async fn call(&self, fn_name: &str, params: &str, ctx: &str) -> Result<String, String> {
-        let data: Result<ParamsType, _> = serde_json::from_str(params);
-        match data {
+        match ParamsType::from_str(params) {
             Ok(data) => self.inner.callback(data, ctx).await,
             Err(err) => Err(format!(
                 "Can not deserialize parameters {params} for fn {fn_name}. Err: {err}",

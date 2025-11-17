@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
 use rust_extensions::{Logger, date_time::DateTimeAsMicroseconds};
-use serde::de::DeserializeOwned;
 use tokio::sync::RwLock;
 
 use crate::{
@@ -9,6 +8,7 @@ use crate::{
     my_auto_gen::{
         AutoGenSettings, MyAutoGenInner, OpenAiResponseStream, RemoteToolFunctions,
         RemoteToolFunctionsHandler, ToolFunction, ToolFunctions,
+        deserializer::impl_from_str::DeserializeToolCallParam,
     },
 };
 
@@ -50,7 +50,7 @@ impl MyAutoGen {
     }
 
     pub async fn register_function<
-        ParamType: JsonTypeDescription + DeserializeOwned + Send + Sync + 'static,
+        ParamType: JsonTypeDescription + DeserializeToolCallParam + Send + Sync + 'static,
         TToolFunction: ToolFunction<ParamType> + Send + Sync + 'static + ToolDefinition,
     >(
         &self,

@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
-use serde::de::DeserializeOwned;
-
+use crate::my_auto_gen::deserializer::impl_from_str::DeserializeToolCallParam;
 use crate::my_auto_gen::{ToolFunction, ToolFunctionAbstract, ToolFunctionHolder};
 
 use crate::{ToolDefinition, json_schema::*};
@@ -25,7 +24,7 @@ impl ToolFunctions {
     }
 
     pub async fn register_function<
-        ParamType: JsonTypeDescription + DeserializeOwned + Send + Sync + 'static,
+        ParamType: JsonTypeDescription + DeserializeToolCallParam + Send + Sync + 'static,
         TToolFunction: ToolFunction<ParamType> + Send + Sync + 'static + ToolDefinition,
     >(
         &mut self,

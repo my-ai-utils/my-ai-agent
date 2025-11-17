@@ -7,6 +7,8 @@ pub fn generate(input: &syn::DeriveInput) -> Result<TokenStream, syn::Error> {
 
     let fields = StructProperty::read(input)?;
 
+    let impl_deserialize_trait = super::generate_deserialize_trait(struct_name, fields.as_slice())?;
+
     let mut fields_to_render = Vec::new();
 
     let mut required_fields = Vec::new();
@@ -36,6 +38,8 @@ pub fn generate(input: &syn::DeriveInput) -> Result<TokenStream, syn::Error> {
                 Self::get_description(false, None, output).await
             }
         }
+
+        #impl_deserialize_trait
 
         #[async_trait::async_trait]
         impl my_ai_agent::json_schema::JsonTypeDescription  for #struct_name{
