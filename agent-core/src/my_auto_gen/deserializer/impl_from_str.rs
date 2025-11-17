@@ -97,6 +97,23 @@ impl DeserializeToolCallParam for isize {
         number_from_str(src)
     }
 }
+impl DeserializeToolCallParam for f32 {
+    fn from_str(src: &str) -> Result<Self, String>
+    where
+        Self: Sized,
+    {
+        number_from_str(src)
+    }
+}
+
+impl DeserializeToolCallParam for f64 {
+    fn from_str(src: &str) -> Result<Self, String>
+    where
+        Self: Sized,
+    {
+        number_from_str(src)
+    }
+}
 
 impl DeserializeToolCallParam for String {
     fn from_str(src: &str) -> Result<Self, String>
