@@ -12,21 +12,23 @@ pub enum LlmModel {
     ZaiGlm4_5Air(ZaiSettings),
     ZaiGlm4_5X(ZaiSettings),
     ZaiGlm4_6(ZaiSettings),
+    FireworksZaiGlm4_6(ZaiSettings),
 }
 
 impl LlmModel {
     pub fn as_str(&self) -> &'static str {
         match self {
-            LlmModel::Gpt4o(_) => "gpt-4o",
-            LlmModel::Gpt4oMini(_) => "gpt-4o-mini",
-            LlmModel::Gpt5(_) => "gpt-5",
-            LlmModel::Gpt5Mini(_) => "gpt-5-mini",
-            LlmModel::Gpt5Nano(_) => "gpt-5-nano",
-            LlmModel::Qwen3_30bA3b(_) => "Qwen/Qwen3-30B-A3B",
-            LlmModel::ZaiGlm4_5(_) => "glm-4.5",
-            LlmModel::ZaiGlm4_5Air(_) => "glm-4.5-air",
-            LlmModel::ZaiGlm4_5X(_) => "glm-4.5-x",
-            LlmModel::ZaiGlm4_6(_) => "glm-4.6",
+            Self::Gpt4o(_) => "gpt-4o",
+            Self::Gpt4oMini(_) => "gpt-4o-mini",
+            Self::Gpt5(_) => "gpt-5",
+            Self::Gpt5Mini(_) => "gpt-5-mini",
+            Self::Gpt5Nano(_) => "gpt-5-nano",
+            Self::Qwen3_30bA3b(_) => "Qwen/Qwen3-30B-A3B",
+            Self::ZaiGlm4_5(_) => "glm-4.5",
+            Self::ZaiGlm4_5Air(_) => "glm-4.5-air",
+            Self::ZaiGlm4_5X(_) => "glm-4.5-x",
+            Self::ZaiGlm4_6(_) => "glm-4.6",
+            Self::FireworksZaiGlm4_6(_) => "accounts/fireworks/models/glm-4p6",
         }
     }
 
@@ -60,6 +62,7 @@ impl LlmModel {
             LlmModel::ZaiGlm4_5Air(settings) => SettingsMode::Zai(*settings),
             LlmModel::ZaiGlm4_5X(settings) => SettingsMode::Zai(*settings),
             LlmModel::ZaiGlm4_6(settings) => SettingsMode::Zai(*settings),
+            LlmModel::FireworksZaiGlm4_6(settings) => SettingsMode::Zai(*settings),
         }
     }
 
