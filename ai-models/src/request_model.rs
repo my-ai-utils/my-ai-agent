@@ -65,8 +65,9 @@ impl OpenAiRequestModel {
                 result.verbosity = settings.verbosity;
             }
             SettingsMode::Qwen(_) => {}
-            SettingsMode::Zai => {}
-            SettingsMode::NebiusZai => {}
+            SettingsMode::Zai(settings) => {
+                result.temperature = settings.temperature;
+            }
         }
 
         result

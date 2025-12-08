@@ -12,3 +12,6 @@ pub use qwen_settings::*;
 
 mod llm_model;
 pub use llm_model::*;
+
+mod zai_settings;
+pub use zai_settings::*;
