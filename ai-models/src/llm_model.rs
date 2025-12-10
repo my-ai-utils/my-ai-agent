@@ -13,6 +13,7 @@ pub enum LlmModel {
     ZaiGlm4_5X(ZaiSettings),
     ZaiGlm4_6(ZaiSettings),
     FireworksZaiGlm4_6(ZaiSettings),
+    CerebrasZaiGlm4_6(ZaiSettings),
 }
 
 impl LlmModel {
@@ -29,6 +30,7 @@ impl LlmModel {
             Self::ZaiGlm4_5X(_) => "glm-4.5-x",
             Self::ZaiGlm4_6(_) => "glm-4.6",
             Self::FireworksZaiGlm4_6(_) => "accounts/fireworks/models/glm-4p6",
+            Self::CerebrasZaiGlm4_6(_) => "zai-glm-4.6",
         }
     }
 
@@ -63,6 +65,7 @@ impl LlmModel {
             LlmModel::ZaiGlm4_5X(settings) => SettingsMode::Zai(*settings),
             LlmModel::ZaiGlm4_6(settings) => SettingsMode::Zai(*settings),
             LlmModel::FireworksZaiGlm4_6(settings) => SettingsMode::Zai(*settings),
+            LlmModel::CerebrasZaiGlm4_6(settings) => SettingsMode::Zai(*settings),
         }
     }
 
