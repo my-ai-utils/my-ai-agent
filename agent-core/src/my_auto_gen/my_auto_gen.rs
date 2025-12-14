@@ -85,16 +85,11 @@ impl MyAutoGen {
 
         let mut tool_calls_result: Vec<ToolCallsResult> = Vec::new();
 
-        let fl_url_connections = Arc::new(flurl::FlUrlHttpClientsCache::new());
-
         loop {
-            let request = super::argentic_response::execute_fl_url_request(
-                settings.unwrap_as_http(),
-                rb,
-                fl_url_connections.clone(),
-            )
-            .await
-            .map_err(|itm| itm.to_string());
+            let request =
+                super::argentic_response::execute_fl_url_request(settings.unwrap_as_http(), rb)
+                    .await
+                    .map_err(|itm| itm.to_string());
 
             let (model, response_body) = match request {
                 Ok(resp) => resp,
