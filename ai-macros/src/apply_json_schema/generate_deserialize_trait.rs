@@ -46,8 +46,10 @@ pub fn generate_deserialize_trait(
                     match_cases.push(quote::quote! {
                         #prop_name_as_str =>{
                             if let Some(value) = value.as_raw_str() {
-                                let value = #tp::from_str(value)?;
-                                #prop_name = Some(value);
+                                if !value.eq_ignore_ascii_case("null") {
+                                  let value = #tp::from_str(value)?;
+                                  #prop_name = Some(value);
+                                }
                             }
                         }
                     });
