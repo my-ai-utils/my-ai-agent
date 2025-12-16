@@ -35,9 +35,11 @@ pub fn generate_deserialize_trait(
                     match_cases.push(quote::quote! {
                         #prop_name_as_str =>{
                              if let Some(value) = value.as_raw_str() {
-                                 let value: Vec<#tp> =
-                                my_ai_agent::my_auto_gen::deserializer::deserialize_array(value)?;
-                            #prop_name = Some(value);
+
+                              if !value.eq_ignore_ascii_case("null") {
+                                 let value: Vec<#tp> = my_ai_agent::my_auto_gen::deserializer::deserialize_array(value)?;
+                                 #prop_name = Some(value);
+                              }
                         }
                         }
                     });
