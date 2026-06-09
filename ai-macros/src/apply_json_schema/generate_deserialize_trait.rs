@@ -72,7 +72,7 @@ pub fn generate_deserialize_trait(
 
                 null_verifications.push(quote::quote! {
                     let Some(#prop_name) = #prop_name else {
-                      return Err(format!("Json filed `#prop_name` is missing"));
+                      return Err(format!("Json field `{}` is missing", #prop_name_as_str));
                     };
                 });
             }
@@ -81,7 +81,7 @@ pub fn generate_deserialize_trait(
                 match_cases.push(quote::quote! {
                     #prop_name_as_str =>{
                            let Some(value) = value.as_raw_str() else {
-                                return Err("Value of `#prop_name` can not be null".to_string());
+                                return Err(format!("Value of `{}` cannot be null", #prop_name_as_str));
                             };
 
                             let value = #prop_type::from_str(value)?;
@@ -92,7 +92,7 @@ pub fn generate_deserialize_trait(
 
                 null_verifications.push(quote::quote! {
                     let Some(#prop_name) = #prop_name else {
-                      return Err(format!("Json filed `#prop_name` is missing"));
+                      return Err(format!("Json field `{}` is missing", #prop_name_as_str));
                     };
                 });
             }
