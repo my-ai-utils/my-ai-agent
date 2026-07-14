@@ -8,7 +8,7 @@ rust-extensions = { tag = "0.1.5", git = "https://github.com/MyJetTools/rust-ext
     "base64",
 ] }
 
-flurl = { tag = "0.6.1", git = "https://github.com/MyJetTools/fl-url.git" }
+flurl = { tag = "0.7.0", git = "https://github.com/MyJetTools/fl-url.git" }
 
 serde = { version = "*", features = ["derive"] }
 serde_json = "*"

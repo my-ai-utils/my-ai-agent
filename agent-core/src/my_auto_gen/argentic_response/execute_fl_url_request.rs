@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use flurl::{FlUrl, body::FlUrlBody};
+use flurl::{FlUrl, body::HttpRequestBody};
 use rust_extensions::{base64::IntoBase64, date_time::DateTimeAsMicroseconds};
 
 use crate::{LlmRequestBuilder, my_auto_gen::*};
@@ -29,7 +29,7 @@ pub async fn execute_fl_url_request(
     .await;
 
     let response = fl_url
-        .post(FlUrlBody::as_json(&model))
+        .post(HttpRequestBody::as_json(&model))
         .await
         .map_err(|itm| itm.to_string())?;
 

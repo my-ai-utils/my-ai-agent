@@ -1,4 +1,4 @@
-use flurl::{FlResponseAsStream, FlUrl, body::FlUrlBody};
+use flurl::{FlResponseAsStream, FlUrl, body::HttpRequestBody};
 
 use super::*;
 
@@ -67,7 +67,7 @@ impl OpenAiChatStreamedResponse {
 }
 
 async fn create_fl_url(open_ai_key: &str, body: &str) -> Result<FlResponseAsStream, String> {
-    let body = FlUrlBody::Json(body.as_bytes().to_vec());
+    let body = HttpRequestBody::Json(body.as_bytes().to_vec());
     let mut response = FlUrl::new("https://api.openai.com/v1/responses")
         .with_header("Authorization", format!("Bearer {}", open_ai_key))
         .post(body)
