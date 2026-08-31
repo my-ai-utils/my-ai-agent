@@ -1,2 +1,3 @@
 [workspace]
+resolver = "3"
 members = ["my-ai-agent", "agent-core", "ai-macros", "tests", "ai-models"]

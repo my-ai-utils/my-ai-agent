@@ -1,3 +1,4 @@
+#![allow(warnings)]
 use my_ai_agent::macros::ApplyJsonSchema;
 
 #[derive(ApplyJsonSchema)]
