@@ -20,12 +20,16 @@ pub fn generate_deserialize_trait(
         let prop_type = field.get_syn_type();
         let prop_name_as_str = prop_name.to_string();
 
+        // Accumulators and the generated locals below are `__`-prefixed so a field
+        // named e.g. `key` or `value` cannot collide with them.
+        let field_var = quote::format_ident!("__field_{}", prop_name);
+
         init_null_props.push(quote::quote! {
-            let mut #prop_name = None;
+            let mut #field_var = None;
         });
 
         create_props.push(quote::quote! {
-            #prop_name,
+            #prop_name: #field_var,
         });
 
         match &field.ty {
@@ -34,11 +38,11 @@ pub fn generate_deserialize_trait(
                     let tp = items.get_token_stream();
                     match_cases.push(quote::quote! {
                         #prop_name_as_str =>{
-                             if let Some(value) = value.as_raw_str() {
+                             if let Some(__value) = __value.as_raw_str() {
 
-                              if !value.eq_ignore_ascii_case("null") {
-                                 let value: Vec<#tp> = my_ai_agent::my_auto_gen::deserializer::deserialize_array(value)?;
-                                 #prop_name = Some(value);
+                              if !__value.eq_ignore_ascii_case("null") {
+                                 let __value: Vec<#tp> = my_ai_agent::my_auto_gen::deserializer::deserialize_array(__value)?;
+                                 #field_var = Some(__value);
                               }
                         }
                         }
@@ -47,10 +51,10 @@ pub fn generate_deserialize_trait(
                     let tp = tp.get_token_stream();
                     match_cases.push(quote::quote! {
                         #prop_name_as_str =>{
-                            if let Some(value) = value.as_raw_str() {
-                                if !value.eq_ignore_ascii_case("null") {
-                                  let value = #tp::from_str(value)?;
-                                  #prop_name = Some(value);
+                            if let Some(__value) = __value.as_raw_str() {
+                                if !__value.eq_ignore_ascii_case("null") {
+                                  let __value = #tp::from_str(__value)?;
+                                  #field_var = Some(__value);
                                 }
                             }
                         }
@@ -62,16 +66,16 @@ pub fn generate_deserialize_trait(
                 let tp = items.get_token_stream();
                 match_cases.push(quote::quote! {
                     #prop_name_as_str =>{
-                         if let Some(value) = value.as_raw_str() {
-                             let value: Vec<#tp> =
-                            my_ai_agent::my_auto_gen::deserializer::deserialize_array(value)?;
-                        #prop_name = Some(value);
+                         if let Some(__value) = __value.as_raw_str() {
+                             let __value: Vec<#tp> =
+                            my_ai_agent::my_auto_gen::deserializer::deserialize_array(__value)?;
+                        #field_var = Some(__value);
                     }
                     }
                 });
 
                 null_verifications.push(quote::quote! {
-                    let Some(#prop_name) = #prop_name else {
+                    let Some(#field_var) = #field_var else {
                       return Err(format!("Json field `{}` is missing", #prop_name_as_str));
                     };
                 });
@@ -80,18 +84,18 @@ pub fn generate_deserialize_trait(
             _ => {
                 match_cases.push(quote::quote! {
                     #prop_name_as_str =>{
-                           let Some(value) = value.as_raw_str() else {
+                           let Some(__value) = __value.as_raw_str() else {
                                 return Err(format!("Value of `{}` cannot be null", #prop_name_as_str));
                             };
 
-                            let value = #prop_type::from_str(value)?;
+                            let __value = #prop_type::from_str(__value)?;
 
-                            #prop_name = Some(value);
+                            #field_var = Some(__value);
                     },
                 });
 
                 null_verifications.push(quote::quote! {
-                    let Some(#prop_name) = #prop_name else {
+                    let Some(#field_var) = #field_var else {
                       return Err(format!("Json field `{}` is missing", #prop_name_as_str));
                     };
                 });
@@ -103,17 +107,17 @@ pub fn generate_deserialize_trait(
 
         impl my_ai_agent::my_auto_gen::deserializer::impl_from_str::DeserializeToolCallParam for #struct_name {
 
-            fn from_str(src: &str) -> Result<Self, String> where Self: Sized,
+            fn from_str(__src: &str) -> Result<Self, String> where Self: Sized,
             {
                 #(#init_null_props)*
 
-                let json_iterator = my_ai_agent::my_json::json_reader::JsonFirstLineIterator::new(src.as_bytes());
+                let __json_iterator = my_ai_agent::my_json::json_reader::JsonFirstLineIterator::new(__src.as_bytes());
 
-                while let Some(next_item) = json_iterator.get_next() {
-                    let (key, value) = next_item.map_err(|err| format!("{:?}", err))?;
-                    let key = key.as_str().map_err(|err| format!("{:?}", err))?;
+                while let Some(__next_item) = __json_iterator.get_next() {
+                    let (__key, __value) = __next_item.map_err(|err| format!("{:?}", err))?;
+                    let __key = __key.as_str().map_err(|err| format!("{:?}", err))?;
 
-                     match key.as_str() {
+                     match __key.as_str() {
                         #(#match_cases)*
                         _ => {}
                         }
@@ -123,9 +127,9 @@ pub fn generate_deserialize_trait(
                 #(#null_verifications)*
 
 
-                let result = Self {#(#create_props)* };
+                let __result = Self {#(#create_props)* };
 
-                Ok(result)
+                Ok(__result)
             }
         }
     };

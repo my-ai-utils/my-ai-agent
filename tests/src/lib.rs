@@ -4,4 +4,5 @@ mod test_opt_enum;
 
 mod test_deserializing_array_as_single_value;
 mod test_deserializing_array_as_single_value_opt;
+mod test_fields_named_as_macro_locals;
 mod tests;
