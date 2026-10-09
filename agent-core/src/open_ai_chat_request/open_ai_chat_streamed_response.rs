@@ -1,11 +1,11 @@
-use flurl::{FlResponseAsStream, FlUrl, body::HttpRequestBody};
+use flurl::{FlUrl, FlUrlBodyReader, body::HttpRequestBody};
 
 use super::*;
 
 pub struct OpenAiChatStreamedResponse {
     request_body: String,
     open_ai_key: String,
-    fl_url: Option<FlResponseAsStream>,
+    fl_url: Option<FlUrlBodyReader>,
     last_chunks: Vec<OpenAiChunk>,
     full_response: Vec<u8>,
 }
@@ -30,7 +30,7 @@ impl OpenAiChatStreamedResponse {
         let fl_url = self.fl_url.as_mut().unwrap();
 
         let chunk = fl_url
-            .get_next_chunk()
+            .next_item()
             .await
             .map_err(|err| format!("{:?}", err))?;
 
@@ -39,7 +39,7 @@ impl OpenAiChatStreamedResponse {
             None => return Ok(None),
         };
 
-        self.full_response.extend_from_slice(chunk.as_slice());
+        self.full_response.extend_from_slice(chunk);
 
         let chunk = match std::str::from_utf8(self.full_response.as_slice()) {
             Ok(value) => value,
@@ -66,7 +66,7 @@ impl OpenAiChatStreamedResponse {
     }
 }
 
-async fn create_fl_url(open_ai_key: &str, body: &str) -> Result<FlResponseAsStream, String> {
+async fn create_fl_url(open_ai_key: &str, body: &str) -> Result<FlUrlBodyReader, String> {
     let body = HttpRequestBody::Json(body.as_bytes().to_vec());
     let mut response = FlUrl::new("https://api.openai.com/v1/responses")
         .with_header("Authorization", format!("Bearer {}", open_ai_key))
@@ -78,11 +78,13 @@ async fn create_fl_url(open_ai_key: &str, body: &str) -> Result<FlResponseAsStre
 
     if status_code != 200 {
         let body = response
-            .get_body_as_str()
+            .get_body()
+            .map_err(|err| format!("{:?}", err))?
+            .into_string(usize::MAX)
             .await
             .map_err(|err| format!("{:?}", err))?;
         return Err(format!("Status code: {}. Body: {}", status_code, body));
     }
 
-    Ok(response.get_body_as_stream())
+    response.get_body().map_err(|err| format!("{:?}", err))
 }

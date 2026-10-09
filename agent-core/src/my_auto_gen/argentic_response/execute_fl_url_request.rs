@@ -28,7 +28,7 @@ pub async fn execute_fl_url_request(
     ))
     .await;
 
-    let response = fl_url
+    let mut response = fl_url
         .post(HttpRequestBody::as_json(&model))
         .await
         .map_err(|itm| itm.to_string())?;
@@ -36,14 +36,21 @@ pub async fn execute_fl_url_request(
     let status_code = response.get_status_code();
 
     if status_code != 200 {
-        let body = response.receive_body().await.unwrap();
+        let body = response
+            .get_body()
+            .unwrap()
+            .into_vec(usize::MAX)
+            .await
+            .unwrap();
         println!("OpenAI status code: {}", status_code);
         println!("{:?}", std::str::from_utf8(body.as_slice()));
         return Err(format!("Status code: {}", status_code));
     }
 
     let body = response
-        .receive_body()
+        .get_body()
+        .map_err(|itm| itm.to_string())?
+        .into_vec(usize::MAX)
         .await
         .map_err(|itm| itm.to_string())?;
 

@@ -1,19 +1,20 @@
 use std::sync::Arc;
 
-use flurl::FlResponseAsStream;
+use flurl::FlUrlBodyReader;
 use tokio::sync::Mutex;
 
 pub enum OpenAiNetworkStream {
-    Http(FlResponseAsStream),
+    Http(FlUrlBodyReader),
     Mock(Arc<Mutex<Vec<String>>>),
 }
 
 impl OpenAiNetworkStream {
     pub async fn get_next_chunk(&mut self) -> Result<Option<Vec<u8>>, String> {
         match self {
-            OpenAiNetworkStream::Http(fl_response_as_stream) => fl_response_as_stream
-                .get_next_chunk()
+            OpenAiNetworkStream::Http(body_reader) => body_reader
+                .next_item()
                 .await
+                .map(|chunk| chunk.map(|chunk| chunk.to_vec()))
                 .map_err(|err| format!("{:?}", err)),
             OpenAiNetworkStream::Mock(items) => {
                 let mut items = items.lock().await;

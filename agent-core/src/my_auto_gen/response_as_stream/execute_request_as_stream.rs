@@ -123,11 +123,16 @@ async fn prepare_open_ai_fl_url_streamed_request(
     rb: &LlmRequestBuilder,
     logger: &Arc<dyn Logger + Send + Sync>,
 ) -> Result<OpenAiInnerResponseStream, String> {
-    let response = prepare_open_ai_fl_url(settings, rb, logger).await?;
+    let mut response = prepare_open_ai_fl_url(settings, rb, logger).await?;
     let status_code = response.get_status_code();
 
     if status_code != 200 {
-        let body = response.receive_body().await.unwrap();
+        let body = response
+            .get_body()
+            .unwrap()
+            .into_vec(usize::MAX)
+            .await
+            .unwrap();
         println!("OpenAI status code: {}", status_code);
         println!("{:?}", std::str::from_utf8(body.as_slice()));
 
@@ -142,8 +147,9 @@ async fn prepare_open_ai_fl_url_streamed_request(
         return Err(err);
     }
 
-    let response =
-        OpenAiInnerResponseStream::new(OpenAiNetworkStream::Http(response.get_body_as_stream()));
+    let body = response.get_body().map_err(|err| format!("{:?}", err))?;
+
+    let response = OpenAiInnerResponseStream::new(OpenAiNetworkStream::Http(body));
 
     Ok(response)
 }
