@@ -9,9 +9,8 @@ edition = "2021"
 proc-macro = true
 
 [dependencies]
-types-reader = { tag = "0.5.1", git = "https://github.com/MyJetTools/types-reader.git" }
+json-schema-macros-core = { tag = "0.1.0", git = "https://github.com/my-jet-tools/json-schema.git" }
 
 
 syn = { version = "*", features = ["extra-traits"] }
 quote = "*"
-proc-macro2 = "*"

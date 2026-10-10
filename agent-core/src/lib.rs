@@ -1,6 +1,6 @@
 pub mod http_chunked_body_reader;
 
-pub mod json_schema;
+pub extern crate json_schema;
 
 mod request_builder;
 pub use request_builder::*;

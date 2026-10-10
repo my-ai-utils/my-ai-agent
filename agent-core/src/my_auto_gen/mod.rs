@@ -23,7 +23,7 @@ pub use exec_tool_call::*;
 mod argentic_response;
 pub use argentic_response::*;
 
-pub mod deserializer;
+pub use json_schema::deserializer;
 
 #[cfg(test)]
 mod mock_data;

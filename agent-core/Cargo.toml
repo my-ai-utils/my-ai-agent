@@ -17,3 +17,4 @@ ai-models = { path = "../ai-models" }
 async-trait = "*"
 tokio = { version = "*" }
 my-json = { tag = "0.3.2", git = "https://github.com/MyJetTools/my-json.git" }
+json-schema = { tag = "0.1.0", git = "https://github.com/my-jet-tools/json-schema.git" }
